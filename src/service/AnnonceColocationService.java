@@ -6,8 +6,10 @@
 package service;
 
 import bean.AnnonceColocation;
-import bean.Quartier;
+
+import bean.User;
 import bean.Ville;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,24 +22,40 @@ public class AnnonceColocationService extends AbstractFacade<AnnonceColocation> 
         super(AnnonceColocation.class);
     }
 
-    public List<AnnonceColocation> findByCreteria(String id, Ville ville, Quartier quartier) {
-        String query = constructQuery(id, ville, quartier);
+    public List<AnnonceColocation> findByCreteria(String id, String ville,String quartier) {
+        String query = constructQuery(id, ville,quartier);
         return getEntityManager().createQuery(query).getResultList();
     }
 
-    private String constructQuery(String id, Ville ville, Quartier quartier) {
+    private String constructQuery(String id, String ville, String quartier) {
         String query = "SELECT a FROM AnnonceCollocation a WHERE 1=1";
         if (id != null) {
             query += " AND a.id='" + id + "'";
             return query;
         }
-        if (ville != null && ville.getId() != null) {
-            query += " AND a.quartier.ville.id='" + ville.getId() + "'";
+        if (ville != null ) {
+            query += " AND a.ville='" + ville + "'";
         }
-        if (quartier != null && quartier.getId() != null) {
-            query += " AND a.quartier.id='" + quartier.getId() + "'";
-        }
+        if (quartier != null) {
+            query += " AND a.quartier'" + quartier+ "'";
+        }  
         return query;
-
     }
+    
+    public int createAd(String id,String titre,String texte,double prix,String ville,String quartier){
+        AnnonceColocation annonceColocation = new AnnonceColocation();
+        if(annonceColocation != null){
+        annonceColocation.setId(id);
+        annonceColocation.setTitre(titre);
+        annonceColocation.setTexte(texte);
+        annonceColocation.setPrix(prix);
+        annonceColocation.setDateAnnonce(new Date());
+        annonceColocation.setVille(ville);
+        annonceColocation.setQuartier(quartier);
+        create(annonceColocation);
+        return 1;
+    } 
+        else return -1;
+    }
+  
 }

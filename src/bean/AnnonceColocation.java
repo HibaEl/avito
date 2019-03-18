@@ -27,14 +27,14 @@ public class AnnonceColocation implements Serializable {
     private String titre;
     private String texte;
     private double prix;
+    private String quartier;
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dateAnnonce;
-    @ManyToOne
-    private Ville ville;
-    @ManyToOne
-    private Quartier quartier;
+    private String ville;
     @ManyToOne
     private User user;
+
+   
 
     public String getTitre() {
         return titre;
@@ -68,20 +68,20 @@ public class AnnonceColocation implements Serializable {
         this.dateAnnonce = dateAnnonce;
     }
 
-    public Ville getVille() {
-        return ville;
-    }
-
-    public void setVille(Ville ville) {
-        this.ville = ville;
-    }
-
-    public Quartier getQuartier() {
+    public String getQuartier() {
         return quartier;
     }
 
-    public void setQuartier(Quartier quartier) {
+    public void setQuartier(String quartier) {
         this.quartier = quartier;
+    }
+
+    public String getVille() {
+        return ville;
+    }
+
+    public void setVille(String ville) {
+        this.ville = ville;
     }
 
     public User getUser() {

@@ -26,15 +26,9 @@ public class Ville implements Serializable {
     @Id
     private String id;
     private String nom;
-    private List<Quartier> quartiers;
+    
 
-    public List<Quartier> getQuartiers() {
-        return quartiers;
-    }
 
-    public void setQuartiers(List<Quartier> quartiers) {
-        this.quartiers = quartiers;
-    }
 
     public String getNom() {
         return nom;

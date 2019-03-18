@@ -17,40 +17,32 @@ public class UserService extends AbstractFacade<User> {
         super(User.class);
     }
 
-    public User createUser(String login, String password, String nom, String prenom, String adresse, double tel, int NbrCnnxRestant, int bloque) {
+    public int createUser(String id,String login, String password, String nom, String prenom, String adresse, double tel) {
         User user = new User();
+        user.setId(id);
         user.setLogin(login);
         user.setPassword(password);
         user.setNom(nom);
         user.setPrenom(prenom);
         user.setAdresse(adresse);
-        user.setBloque(bloque);
-        user.setTel(0);
-        user.setNbrCnnxRestant(NbrCnnxRestant);
+        user.setTel(tel);
+        user.setNbrCnnxRestant(3);
         create(user);
-        return user;
-
+        return 1;
+     
     }
 
-    public int connectUser(String login, String password) {
-        User user = find(login);
-        if (user == null) {
-            return -1;
-        } else if (user.getBloque() == 1) {
-            return -2;
-        } else if (user.getPassword().equals(password)) {
-            if (user.getNbrCnnxRestant() > 0) {
-                user.setNbrCnnxRestant(user.getNbrCnnxRestant() - 1);
-                edit(user);
-                return -3;
-            } else {
-                user.setBloque(1);
-                edit(user);
-                return -4;
-            }
-        } else {
-            return 1;
 
+     public int connectUser(User user) {
+        User LoadedUser = find(user.getLogin());
+        if (LoadedUser == null) {
+            return -1;
+        } else if (!LoadedUser.getPassword().equals(user.getPassword())) {
+            return -2;
+        } else {
+            user.setNbrCnnxRestant(user.getNbrCnnxRestant()-1);
+            user.setBloque(1);
+            return 1;
         }
     }
 

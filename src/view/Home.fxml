@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.HomeController">
+   <children>
+      <Label layoutX="245.0" layoutY="34.0" text="AVITO" textFill="#b54b4b">
+         <font>
+            <Font name="Arial" size="39.0" />
+         </font>
+      </Label>
+      <Label layoutX="217.0" layoutY="98.0" text="Annonce de colocation ">
+         <font>
+            <Font name="System Bold" size="17.0" />
+         </font>
+      </Label>
+      <Button layoutX="91.0" layoutY="263.0" mnemonicParsing="false" onAction="#login" text="Connexion" />
+      <Button layoutX="238.0" layoutY="263.0" mnemonicParsing="false" onAction="#addAd" text="Ajouter annonce" />
+      <Button layoutX="405.0" layoutY="263.0" mnemonicParsing="false" onAction="#addUser" text="Créer votre compte" />
+   </children>
+</AnchorPane>
