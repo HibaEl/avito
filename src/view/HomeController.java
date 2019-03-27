@@ -30,6 +30,10 @@ public class HomeController implements Initializable {
     public void login(javafx.event.ActionEvent actionEvent) throws IOException {
         Launcher.forward(actionEvent, "Connection.fxml", this.getClass());
     }
+    @FXML
+    public void initHelper(javafx.event.ActionEvent actionEvent) throws IOException {
+        Launcher.forward(actionEvent, "ListeAnnonces.fxml", this.getClass());
+    }
     /**
      * Initializes the controller class.
      */

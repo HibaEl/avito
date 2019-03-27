@@ -1,104 +1,87 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package helper;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JTable;
-import javax.swing.table.AbstractTableModel;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import util.DaoEngigne;
 
 /**
  *
- * @author dell
+ *  @author cneree
+ * @param <T>
  */
-public abstract class AbstractHelper<T> extends AbstractTableModel {
+public abstract class AbstractHelper<T> {
 
     protected AbstractHelperItem[] abstractHelperItem;
     protected List<T> list = new ArrayList<T>();
-    protected JTable jTable = new JTable();
+    protected TableView<T> table;
+    private ObservableList<T> data;
 
-    public JTable getjTable() {
-        return jTable;
+    public TableView<T> getTable() {
+        return table;
     }
 
-    public void setjTable(JTable jTable) {
-        this.jTable = jTable;
+    public void setTable(TableView<T> table) {
+        this.table = table;
     }
 
-    public AbstractHelper(AbstractHelperItem[] abstractHelperItem, JTable jTable, List<T> list) {
+    public AbstractHelper(AbstractHelperItem[] abstractHelperItem, TableView<T> table) {
         this.abstractHelperItem = abstractHelperItem;
-        this.jTable = jTable;
+        this.table = table;
+        setupTable();
+    }
+
+    public AbstractHelper(AbstractHelperItem[] abstractHelperItem, TableView<T> table, List<T> list) {
+        this.abstractHelperItem = abstractHelperItem;
+        this.table = table;
         this.list = list;
-        jTable.setModel(this);
-    }
-     public AbstractHelper(AbstractHelperItem[] abstractHelperItem, JTable jTable) {
-         List<T> myList = new ArrayList<>();
-        this.abstractHelperItem = abstractHelperItem;
-        this.jTable = jTable;
-        this.list = myList;
-        jTable.setModel(this);
+        setupTable();
     }
 
-    public void save(T t) {
-        list.add(t);
-        for (int i = 0; i <  abstractHelperItem.length; i++) {
-            fireTableRowsInserted(abstractHelperItem.length- 1, i);
+    public void select(T t) {
+        table.getSelectionModel().select(t);
+    }
+
+    private void setupTable() {
+        for (int i = 0; i < abstractHelperItem.length; i++) {
+            TableColumn<T, ?> column = new TableColumn<>(abstractHelperItem[i].getColumnName());
+            column.setCellValueFactory(new PropertyValueFactory<>(abstractHelperItem[i].getAttributeName()));
+            table.getColumns().add(column);
         }
+        data = FXCollections.observableArrayList(list);
+        table.setItems(data);
+    }
+
+    public void create(T t) {
+        list.add(t);
+        data = FXCollections.observableArrayList(list);
+        table.setItems(data);
     }
 
     public void remove(T t) {
-        int selected = jTable.getSelectedRow();
-        list.remove(selected);
-        for (int i = 0; i <  abstractHelperItem.length; i++) {
-            fireTableRowsDeleted(selected, i);
-
-        }
-    }
-
-    public void update(T t) {
-        int selected = jTable.getSelectedRow();
-        list.set(selected, t);
-        for (int i = 0; i <  abstractHelperItem.length; i++) {
-            fireTableRowsUpdated(selected, i);
-        }
+        list.remove(t);
+        data = FXCollections.observableArrayList(list);
+        table.setItems(data);
     }
 
     public T getSelected() {
-        if (getSelectedIdex() != -1) {
-            return list.get(jTable.getSelectedRow());
-        }
-        return null;
-    }
-
-    public int getSelectedIdex() {
-        return jTable.getSelectedRow();
-    }
-
-    @Override
-    public int getRowCount() {
-        if (list != null) {
-            return list.size();
-        }
-        return 0;
-    }
-
-    @Override
-    public int getColumnCount() {
-        return abstractHelperItem.length;
-    }
-
-    public List<T> getList() {
-        return list;
+        return table.getSelectionModel().getSelectedItem();
     }
 
     public void setList(List<T> list) {
-        this.list = list;
-        fireTableDataChanged();
+        data = FXCollections.observableArrayList(list);
+        table.setItems(data);
     }
-
     public T getValueAt(int rowIndex) {
         if (list!=null && rowIndex < list.size()) {
             return list.get(rowIndex);
@@ -106,14 +89,8 @@ public abstract class AbstractHelper<T> extends AbstractTableModel {
 
         return null;
     }
-
-    @Override
-    public String getColumnName(int columnIndex) {
-        return abstractHelperItem[columnIndex].getColumnName();
-    }
-
     
-    @Override
+    
     public Object getValueAt(int rowIndex, int columnIndex) {
         if (list!=null && rowIndex < list.size()) {
             for (int i = 0; i < abstractHelperItem.length; i++) {
@@ -122,7 +99,6 @@ public abstract class AbstractHelper<T> extends AbstractTableModel {
                     try {
                         return DaoEngigne.lunchGetterByParamName(list.get(rowIndex), abstractHelperItem[i].getAttributeName());
                     } catch (Exception ex) {
-                        ex.printStackTrace();
                     }
                 }
             }

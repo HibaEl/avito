@@ -57,5 +57,11 @@ public class AnnonceColocationService extends AbstractFacade<AnnonceColocation> 
     } 
         else return -1;
     }
+    
+    
+   public int deleteAnnonce(AnnonceColocation annonceColocation){
+       remove(annonceColocation);
+       return 1;
+   }
   
 }

@@ -29,7 +29,7 @@ public class Launcher extends Application {
         stage.setScene(scene);
         stage.setTitle("AVITO");
         stage.show();
-    }
+    } 
   public static void forward(ActionEvent actionEvent, String pageName, Class myClass) throws IOException {
         Parent parent = FXMLLoader.load(myClass.getResource(pageName));
         Scene scene = new Scene(parent);
